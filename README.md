@@ -2,6 +2,8 @@
 
 English parts-of-speech highlighting and Style Check for [MarkEdit](https://github.com/MarkEdit-app/MarkEdit) that leverages [markedit-api](https://github.com/MarkEdit-app/MarkEdit-api), powered by [Compromise](https://github.com/spencermountain/compromise) and [write-good](https://github.com/btford/write-good). All analysis runs locally; your Markdown files are unchanged.
 
+Inspired by iA Writer’s [Syntax Highlight](https://ia.net/writer/support/editor/syntax-highlight?platform=mac) and [Style Check](https://ia.net/writer/support/editor/style-check) modes.
+
 ## Installation
 
 Copy [markedit-prose.js](https://github.com/alexsereno/markedit-prose/releases/latest/download/markedit-prose.js) to `~/Library/Containers/app.cyan.markedit/Data/Documents/scripts/`, then restart MarkEdit.
