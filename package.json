@@ -1,0 +1,39 @@
+{
+  "name": "markedit-prose",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "bun scripts/build.ts",
+    "test": "bun test",
+    "lint": "biome check src tests scripts/*.ts",
+    "typecheck": "tsc --noEmit",
+    "check": "bun run lint && bun run typecheck && bun test && bun run build",
+    "test:webkit": "bun scripts/smoke.ts"
+  },
+  "dependencies": {
+    "compromise": "14.14.5",
+    "write-good": "1.0.8"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "2.3.1",
+    "@types/bun": "1.3.1",
+    "@codemirror/lang-markdown": "6.5.0",
+    "@codemirror/language": "6.11.3",
+    "@codemirror/state": "6.5.2",
+    "@codemirror/view": "6.38.6",
+    "@lezer/common": "1.2.3",
+    "@lezer/markdown": "1.5.1",
+    "esbuild": "0.25.11",
+    "markedit-api": "https://github.com/MarkEdit-app/MarkEdit-api#v0.38.0",
+    "typescript": "5.9.3"
+  },
+  "description": "Local English parts-of-speech highlighting and style suggestions for MarkEdit.",
+  "author": "alexsereno",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/alexsereno/markedit-prose.git"
+  },
+  "homepage": "https://github.com/alexsereno/markedit-prose"
+}
