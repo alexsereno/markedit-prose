@@ -1,10 +1,11 @@
 // A real CodeMirror host, with only MarkEdit's native bridge replaced for the WebKit smoke test.
 
-import { markdown } from "@codemirror/lang-markdown";
 import * as language from "@codemirror/language";
 import * as stateModule from "@codemirror/state";
 import * as viewModule from "@codemirror/view";
+import * as lezerMarkdown from "@lezer/markdown";
 import type { MenuItem } from "markedit-api";
+import { markeditMarkdown } from "./fixtures/language";
 
 const global = window as unknown as Record<string, unknown>;
 const extensions: stateModule.Extension[] = [];
@@ -33,6 +34,7 @@ const host = {
 global.MarkEdit = host;
 global.require = (name: string) => {
   if (name === "markedit-api") return { MarkEdit: global.MarkEdit };
+  if (name === "@lezer/markdown") return lezerMarkdown;
   throw new Error(name);
 };
 global.runSmoke = async () => {
@@ -44,7 +46,10 @@ global.runSmoke = async () => {
     "😀 Cats don’t run. Cats run quickly and cats run.\n\nvery **very** clear\n\n`very very cats`\n\n[Visible cats](https://very.example)\n\n    very very cats";
   const editor = new viewModule.EditorView({
     parent: document.body,
-    state: stateModule.EditorState.create({ doc: source, extensions: [markdown(), ...extensions] }),
+    state: stateModule.EditorState.create({
+      doc: source,
+      extensions: [markeditMarkdown(), ...extensions],
+    }),
   });
   host.editorView = editor;
   assert(editor.dom.isConnected, "Editor was not mounted");
@@ -162,6 +167,30 @@ global.runSmoke = async () => {
     menus[0].children?.every((item) => item.key !== "e"),
     "Removed explanation shortcut remains",
   );
+  const metadataSource =
+    '---\ntitle: really really\n---\n\n# Cats run\n\nSee [visible cats][ref].\n\n[ref]: https://really.example "really really"\n\n[^note]: Very **very** clear cats.\n\n    Dogs run quickly.\n\n$$\\text{really really}$$\n\n|very|very|\n|---|---|\n|Cats|Dogs|\n\nCats `really really` run <!-- really really -->.';
+  editor.dispatch({ changes: { from: 0, to: editor.state.doc.length, insert: metadataSource } });
+  await wait(1500);
+  const decorations = [...editor.contentDOM.querySelectorAll('[class*="mep-"]')];
+  assert(decorations.length > 0, "Markdown integration lost all decorations");
+  assert(
+    decorations.every((element) => !element.textContent?.includes("really")),
+    "Non-prose metadata was decorated",
+  );
+  const expectedFootnote = metadataSource.indexOf("**very**") + 2;
+  assert(
+    decorations.some(
+      (element) =>
+        element.classList.contains("mep-suggestion") &&
+        element.textContent === "very" &&
+        editor.posAtDOM(element) === expectedFootnote,
+    ),
+    "Footnote prose or source mapping was lost",
+  );
+  assert(
+    editor.state.doc.toString() === metadataSource,
+    "Markdown integration changed the document",
+  );
   document.hasFocus = originalHasFocus;
   editor.destroy();
   return {
@@ -177,5 +206,6 @@ global.runSmoke = async () => {
     nativeTooltipSurface: true,
     focusedLineDecorated: true,
     simplifiedMenu: true,
+    markdownExclusions: true,
   };
 };

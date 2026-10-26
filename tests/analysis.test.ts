@@ -1,12 +1,12 @@
 import { describe, expect, test } from "bun:test";
-import { parser } from "@lezer/markdown";
 import { analyzeText, mapMarks, occurrences } from "../src/analyze";
 import { project } from "../src/prose";
 import { Revision } from "../src/revision";
 import { defaults, parseSettings } from "../src/settings";
+import { parseMarkdown } from "./fixtures/language";
 
 function analyze(source: string, settings = defaults()) {
-  return project(source, parser.parse(source)).flatMap((chunk) =>
+  return project(source, parseMarkdown(source)).flatMap((chunk) =>
     mapMarks(chunk, analyzeText(chunk.text, settings)),
   );
 }
@@ -30,7 +30,7 @@ describe("source positions and Markdown", () => {
   test("excludes code blocks, inline code, destinations and reference definitions", () => {
     const source =
       '# **Visible cats**\n\n[very very cats](https://very.example/very)\n\n```js\nvery very cats\n```\n\n    very very cats\n\n`very very cats`\n\n[visible dogs][id]\n\n[id]: https://very.example "very title"';
-    const chunks = project(source, parser.parse(source));
+    const chunks = project(source, parseMarkdown(source));
     const text = chunks.map((chunk) => chunk.text).join("|");
     expect(text).toContain("Visible cats");
     expect(text).toContain("very very cats");
@@ -146,7 +146,7 @@ describe("edits and configuration", () => {
   });
   test("bounded chunks preserve every prose position", () => {
     const source = "Cats run quickly. ".repeat(1000);
-    const chunks = project(source, parser.parse(source));
+    const chunks = project(source, parseMarkdown(source));
     expect(chunks.length).toBeGreaterThan(1);
     expect(chunks.map((chunk) => chunk.text).join("")).toBe(source);
     expect(chunks.flatMap((chunk) => chunk.positions)).toEqual(

@@ -7,7 +7,7 @@ import { categories, type Mark, parts, type Result, type Settings } from "./type
 
 const { EditorView: View, ViewPlugin, Decoration, hoverTooltip } = MarkEdit.codemirror.view;
 const { StateEffect } = MarkEdit.codemirror.state;
-const { ensureSyntaxTree } = MarkEdit.codemirror.language;
+const { ensureSyntaxTree, language } = MarkEdit.codemirror.language;
 const refresh = StateEffect.define<null>();
 const results = StateEffect.define<Mark[]>();
 let settings = defaults();
@@ -146,7 +146,7 @@ class ProseView {
           this.view.dispatch({ effects: results.of([]) });
         };
       }
-      const chunks = project(state.doc.toString(), tree);
+      const chunks = project(state.doc.toString(), tree, state.facet(language)?.parser);
       this.busy = true;
       this.worker.postMessage({ id: this.revision.next(), chunks, settings });
     } catch (error) {

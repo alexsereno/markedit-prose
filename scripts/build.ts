@@ -2,6 +2,8 @@ import { build } from "esbuild";
 import { notices } from "./notices";
 import { scopeLegacyMatch } from "./vendor-patches";
 
+const { version } = await Bun.file("package.json").json();
+
 const worker = await build({
   entryPoints: ["src/worker.ts"],
   plugins: [scopeLegacyMatch],
@@ -20,7 +22,7 @@ const main = await build({
   entryPoints: ["src/main.ts"],
   bundle: true,
   outfile: "dist/markedit-prose.js",
-  banner: { js: `/*! MarkEdit Prose 0.1.0 — MIT.\n${licenses.replaceAll("*/", "* /")}*/` },
+  banner: { js: `/*! MarkEdit Prose ${version} — MIT.\n${licenses.replaceAll("*/", "* /")}*/` },
   format: "cjs",
   platform: "browser",
   target: "safari16",

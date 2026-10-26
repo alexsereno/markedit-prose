@@ -1,6 +1,6 @@
 import nlp from "compromise";
 import writeGood from "write-good";
-import { sourceSpans } from "./prose";
+import { sourceSpans } from "./positions";
 import { type Category, type Chunk, type Mark, parts, type Settings, type Span } from "./types";
 
 const checks: Record<Exclude<Category, "custom">, string[]> = {

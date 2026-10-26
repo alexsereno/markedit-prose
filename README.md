@@ -21,6 +21,8 @@ Open **Extensions > Prose** to configure:
 - **Personal Exceptions…**: Add or remove phrases that Style Check should allow.
 - **Custom Phrase Rules…**: Add a phrase and an explanation, or remove an existing rule.
 
+Analysis includes prose in headings, lists, table cells, visible link text, and footnotes. It skips code, link metadata, YAML front matter, math blocks, HTML tags/comments, and Markdown markers.
+
 Both features start enabled. Colors adapt to light and dark themes. Suggestions are optional editing advice; text is never changed automatically.
 
 Settings are remembered across launches in `markedit-prose.settings.json` beside the installed script. Custom rules match whole phrases, ignoring case and allowing flexible whitespace. See the [guide](docs/guide.md) for manual configuration, matching behavior, and limitations.
