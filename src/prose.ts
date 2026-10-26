@@ -78,7 +78,11 @@ export function project(
   if (references.length)
     bodyParser.parse(source).iterate({
       enter(node) {
-        if (node.name === "LinkReference" && !inFootnote(node.from, node.to)) {
+        if (
+          node.name === "LinkReference" &&
+          !source.startsWith("[^", node.from) &&
+          !inFootnote(node.from, node.to)
+        ) {
           cuts.push({
             from: node.from,
             to: node.node.getChild("LinkTitle")

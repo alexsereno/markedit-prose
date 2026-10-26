@@ -65,6 +65,19 @@ describe("MarkEdit Markdown grammar", () => {
     expect(repeated && source.slice(repeated.from, repeated.to)).toBe("very");
     expect(repeated?.from).toBe(source.indexOf("**very**") + 2);
   });
+  test("short footnotes cannot be reclassified as reference URLs with a following title", () => {
+    const source =
+      '[ref]: https://example.com\n\n[^id]: Cats\n  "really useful"\n\nNext paragraph.';
+    const result = inspect(source);
+    expect(result.text).toContain("Cats");
+    expect(result.text).toContain('"really useful"');
+    expect(result.text).not.toContain("https");
+    expect(
+      result.marks.some(
+        (mark) => mark.part === "Noun" && source.slice(mark.from, mark.to) === "Cats",
+      ),
+    ).toBe(true);
+  });
   test("code, destinations, and tags inside footnotes are still excluded", () => {
     const source =
       '[^id]: Prose `very very code` and [visible dogs](https://very.example).\n\n        very very indented code\n\n    Cats run <span title="very very">quickly</span>.\n\n    ```js\n    very very fenced code\n    ```\n\nNext paragraph.';
