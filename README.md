@@ -4,6 +4,14 @@ English parts-of-speech highlighting and Style Check for [MarkEdit](https://gith
 
 Inspired by iA Writer’s [Syntax Highlight](https://ia.net/writer/support/editor/syntax-highlight?platform=mac) and [Style Check](https://ia.net/writer/support/editor/style-check) modes.
 
+The extension highlights whatever parts of speech you choose (adjectives and adverbs here)
+
+<img width="1916" height="1244" alt="CleanShot 2026-10-27 at 4 29 21 PM@2x" src="https://github.com/user-attachments/assets/1e8ec38a-ced5-4ff2-9b50-64914059aa4d" />
+
+It also runs them through an English language linter to make suggestions to improve your prose.
+
+<img width="1916" height="1244" alt="CleanShot 2026-10-27 at 4 29 28 PM@2x" src="https://github.com/user-attachments/assets/aeb171e2-9bb6-4396-a167-cf16ac328ec2" />
+
 ## Installation Notes
 
 > Turn off **MarkEdit > Settings > Assistant > Inline Predictions**. The extension's decorations can cause the grey predicted text to appear before the word being typed. This setting is separate from **Suggest While Typing**, which shows a completion list.
